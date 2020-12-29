@@ -36,7 +36,7 @@ router.get('/blogarchive.list', async function (req, res, next) {
   let year='0'
   blogList.forEach(item => {
     let newyear=moment(item.createDate).format('YYYY').toString()
-    console.log(year);
+    
     if(year!==newyear){
       year=newyear
       ayear.yearname=newyear
@@ -44,7 +44,7 @@ router.get('/blogarchive.list', async function (req, res, next) {
     }
     yearlist[yearlist.length-1].yearlist.push(item)
   });
-  console.log(yearlist);
+  
   res.json({ code: 0, msg: '列表查询成功', data: yearlist})
 })
 //请求所有文章列表
@@ -61,7 +61,7 @@ router.get('/blog.list', async function (req, res, next) {
   let allPageNum = 1
   let blogsLength = 1
   if (!tagID || tagID === '') {
-    console.log('正在查询一共多少条文章ing...')
+    
     allPageNum = await Blog.findAll({
       attributes: [
         [Sequelize.fn('COUNT', Sequelize.col('*')), 'allPageNum'] // 添加聚合...
@@ -70,8 +70,8 @@ router.get('/blog.list', async function (req, res, next) {
 
     blogsLength = parseInt(allPageNum[0].dataValues.allPageNum)
     allPageNum = Math.ceil(parseInt(allPageNum[0].dataValues.allPageNum) / size)
-    console.log('查询并计算出了一共多少页')
-    console.log('没有标签分类条件开始查询文章列表。。。。')
+    
+    
     blogList = await Blog.findAll({
       attributes: ['blogID', 'title', 'body', 'createDate', 'witch'],
       include: {
@@ -86,7 +86,7 @@ router.get('/blog.list', async function (req, res, next) {
 
     });
   } else {
-    console.log('正在查询一共多少条文章ing...')
+    
     allPageNum = await Blog.findAll({
       attributes: [
         [Sequelize.fn('COUNT', Sequelize.col('*')), 'allPageNum'] // 添加聚合...
@@ -102,8 +102,8 @@ router.get('/blog.list', async function (req, res, next) {
     });
     blogsLength = parseInt(allPageNum[0].dataValues.allPageNum)
     allPageNum = Math.ceil(parseInt(allPageNum[0].dataValues.allPageNum) / size)
-    console.log('查询并计算出了一共多少页')
-    console.log('有标签分类条件开始查询这呢。。。。')
+    
+    
     blogList = await Blog.findAll({
       attributes: ['blogID', 'title', 'body', 'createDate', 'witch'],
       include: {
@@ -121,8 +121,8 @@ router.get('/blog.list', async function (req, res, next) {
 
     });
   }
-  console.log('已完成查询！！！')
-  console.log(blogsLength);
+  
+  
   res.json({ code: 0, msg: '列表查询成功', allPageNum, data: blogList, blogsLength })
 })
 
@@ -134,7 +134,7 @@ router.get('/blog.one', async function (req, res, next) {
     res.send({ code: 1, msg: '文章查询失败，没有ID', data: {} })
     return;
   }
-  console.log('用户进行了文章查询,正查着呢...')
+  
   blog = await Blog.findOne({
     attributes: ['blogID', 'title', 'body', 'context', 'createDate', 'witch'],
     include: {
@@ -147,21 +147,21 @@ router.get('/blog.one', async function (req, res, next) {
       blogID
     }
   });
-  console.log('文章查询完成！！！')
+  
   res.send({ code: 0, msg: '文章查询成功', data: blog })
 })
 
 //每页推荐句子
 router.get('/getsentence.rander', async function (req, res, next) {
-  console.log('用户进行了短句查询,正查着呢...')
+  
   let sentences = await Sentence.findAll()
   if (sentences.length === 0) {
     res.send({ code: 1, msg: '短句数量为0', data: {} })
   }
-  console.log('开始随机');
+  
   let index = random(0, parseInt(sentences.length))
-  console.log('确定返回那条短句！！！', index)
-  console.log('短句列表长度！！！', sentences.length)
+  
+  
   res.send({ code: 0, msg: '短句查询成功', data: sentences[index] })
 })
 

@@ -14,10 +14,10 @@ const sequelize = new Sequelize(dbname, username, password, {
 sequelize
     .authenticate()
     .then(() => {
-        console.log('数据库连接成功')
+        
     })
     .catch(err => {
-        console.log('数据库连接失败，失败原因：', err)
+        
     })
 
 // var current_time = moment(Date.now()).format('YYYY-MM-DD')
@@ -101,7 +101,7 @@ const Admin = sequelize.define("tb_admin", {
 //强制同步模型
 (async () => {
     await sequelize.sync({ force: false });
-    console.log("所有模型均已成功同步.");
+    console.log('模型同步成功。。。');
 })()
 
 module.exports = { Blog, TagType,Sentence,Admin }

@@ -3,12 +3,13 @@
 const { Sequelize, DataTypes } = require("sequelize");
 //引入时间日期格式化字符串
 var moment = require('moment');
+let {password,username,ip,dbname}=require('../config');
+const { log } = require("debug");
 // 进行数据库连接
-const sequelize = new Sequelize('blog', 'root', '123qqq...A', {
-    host: 'localhost',
+const sequelize = new Sequelize(dbname, username, password, {
+    host: ip,
     dialect: 'mysql'
 });
-
 // 测试连接是否成功
 sequelize
     .authenticate()

@@ -52,7 +52,11 @@ router.post('/login', async (req, res, next) => {
     }
   }
 })
-
+//查询短句列表
+router.get('/sentence.list', async function (req, res, next) {
+  let sentence=await Sentence.findAll({})
+    res.json({ code: 0, msg: '查询短句列表成功', data: sentence})
+});
 //添加短句
 router.post('/sentence.add', async function (req, res, next) {
   let { sentenceName, sentenceContext } = req.body;
@@ -69,6 +73,34 @@ router.post('/sentence.add', async function (req, res, next) {
     console.log('短句插入失败！！！！！！');
     res.json({ code: 1, msg: '插入短句失败', data: tagName })
   }
+});
+//删除短句
+router.post('/sentence.delete', async function (req, res, next) {
+  let sentenceID = req.body.sentenceID;
+  console.log('用户进行短句删除ing....');
+  const sentence = await Sentence.destroy({where:{sentenceID}})
+  if(sentence>=1){
+    res.json({ code: 0, msg: '短句删除成功',data:{}})
+  }else{
+    res.json({ code: 1, msg: '短句删除失败',data:{}})
+  }
+});
+//修改短句
+router.post('/sentence.edit', async function (req, res, next) {
+  let { sentenceName, sentenceContext,sentenceID } = req.body;
+  let up=await Sentence.update(
+    {
+      sentenceName,
+      sentenceContext
+    }, {
+      'where': { sentenceID }
+    }
+  )
+  if(up[0]>=0){
+    res.json({code:0,msg:'修改成功'})
+    return
+  }
+  res.json({code:1,msg:'修改失败'})
 });
 
 //查询标签列表
@@ -89,7 +121,33 @@ router.post('/tagstype.add', async function (req, res, next) {
     res.json({ code: 1, msg: '插入标签失败', data: tagName })
   }
 });
-
+//删除标签
+router.post('/tagstype.delete', async function (req, res, next) {
+  let tagTypeID = req.body.tagTypeID;
+  console.log('用户进行标签删除ing....');
+  const tagtype = await TagType.destroy({where:{tagTypeID}})
+  if(tagtype>=1){
+    res.json({ code: 0, msg: '标签删除成功',data:{}})
+  }else{
+    res.json({ code: 1, msg: '标签删除失败',data:{}})
+  }
+});
+//修改标签
+router.post('/tagstype.edit', async function (req, res, next) {
+  let {tagTypeID,tagName} = req.body;
+  let up=await TagType.update(
+    {
+      tagName
+    }, {
+      'where': { tagTypeID }
+    }
+  )
+  if(up[0]>=0){
+    res.json({code:0,msg:'修改成功'})
+    return
+  }
+  res.json({code:1,msg:'修改失败'})
+});
 //发布文章
 router.post('/blog.insert', async function (req, res, next) {
   let { title, body, context, createDate, witch, tagsID } = req.body;
@@ -110,7 +168,6 @@ router.post('/blog.insert', async function (req, res, next) {
   console.log('文章标签插入成功！');
   res.json({ code: 0, msg: '文章插入成功', data: { blogID: blog.dataValues.blogID, title, createDate: blog.dataValues.createDate } })
 })
-
 //修改文章
 router.post('/blog.edit', async (req, res, next) => {
   let {blogID, title, body, context, createDate, witch, tagsID } = req.body;

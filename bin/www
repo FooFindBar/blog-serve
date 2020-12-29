@@ -7,14 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('guigu-serve:server');
 var http = require('http');
+let {port1}=require('../config.js')
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4000');
+var port = normalizePort(process.env.PORT || port1);
 app.set('port', port);
-
 /**
  * Create HTTP server.
  */
